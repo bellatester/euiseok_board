@@ -9,6 +9,7 @@ import springboard.board.dto.BoardDto;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BoardService {
@@ -21,9 +22,10 @@ public class BoardService {
     public Long savePost(BoardDto boardDto){
         return boardRepository.save(boardDto.toEntity()).getId();
     }
+    //게시물을 DB에 저장하는 함수
 
     @Transactional
-    public List<BoardDto> getBoardList(){
+    public List<BoardDto> getBoardList(){ //전체 게시판 목록을 List로 가져오는 함수
         List<Board> boardList = boardRepository.findAll();
         List<BoardDto> boardDtoList = new ArrayList<>();
         for(Board board : boardList){
@@ -37,5 +39,18 @@ public class BoardService {
             boardDtoList.add(boardDto);
         }
         return boardDtoList;
+    }
+
+    @Transactional
+    public BoardDto getPost(Long id){ //해당 id에 맞는 BoardDto를 가져오는 함수이다.
+        Board board = boardRepository.findById(id).get();
+        BoardDto boardDto = BoardDto.builder()
+                .id(board.getId())
+                .author(board.getAuthor())
+                .title(board.getTitle())
+                .content(board.getContent())
+                .createdDate(board.getCreatedDate())
+                .build();
+        return boardDto;
     }
 }
