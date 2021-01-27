@@ -8,6 +8,7 @@ import springboard.board.dto.BoardDto;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,5 +53,10 @@ public class BoardService {
                 .createdDate(board.getCreatedDate())
                 .build();
         return boardDto;
+    }
+
+    @Transactional
+    public void deletePost(Long id){
+        boardRepository.deleteById(id);
     }
 }
